@@ -3,14 +3,13 @@ package app
 import (
 	"database/sql"
 	"time"
+	"todos/helper"
 )
 
 func NewDB() *sql.DB {
 	db, err := sql.Open("mysql", "root@tcp(localhost:3306)/journey_of_learn_golang_todos")
 
-	if err != nil {
-		panic(err.Error())
-	}
+	helper.PanicIfError(err)
 
 	db.SetMaxIdleConns(5)
 	db.SetMaxOpenConns(20)
