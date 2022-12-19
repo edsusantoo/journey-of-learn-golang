@@ -17,7 +17,13 @@ func NewAuthRepository() AuthRepository {
 
 func (repository *AuthRepositoryImpl) Register(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
 	SQL := "INSERT INTO users (username,first_name,last_name,password)values(?,?,?,?)"
-	result, err := tx.ExecContext(ctx, SQL, user.Username, user.FirstName, user.LastName, helper.HashPassword(user.Password))
+	result, err := tx.ExecContext(ctx,
+		SQL,
+		user.Username,
+		user.FirstName,
+		user.LastName,
+		helper.HashPassword(user.Password),
+	)
 	helper.PanicIfError(err)
 	id, err := result.LastInsertId()
 	helper.PanicIfError(err)
@@ -38,7 +44,15 @@ func (repository *AuthRepositoryImpl) Login(ctx context.Context, tx *sql.Tx, use
 	dUser := domain.User{}
 
 	if rows.Next() {
-		err := rows.Scan(&dUser.Id, &dUser.Username, &dUser.FirstName, &dUser.LastName, &dUser.Active, &dUser.CreatedAt, &dUser.UpdatedAt)
+		err := rows.Scan(
+			&dUser.Id,
+			&dUser.Username,
+			&dUser.Password,
+			&dUser.FirstName,
+			&dUser.LastName,
+			&dUser.Active,
+			&dUser.CreatedAt,
+			&dUser.UpdatedAt)
 		helper.PanicIfError(err)
 
 		//check password
@@ -49,6 +63,6 @@ func (repository *AuthRepositoryImpl) Login(ctx context.Context, tx *sql.Tx, use
 		}
 
 	} else {
-		return dUser, nil
+		return dUser, errors.New("user not found")
 	}
 }

@@ -1,4 +1,4 @@
-package service
+package auth
 
 import (
 	"context"
@@ -15,6 +15,14 @@ type AuthServiceImpl struct {
 	AuthRepository authRepo.AuthRepository
 	DB             *sql.DB
 	Validate       *validator.Validate
+}
+
+func NewAuthService(repo authRepo.AuthRepository, DB *sql.DB, validate *validator.Validate) AuthService {
+	return &AuthServiceImpl{
+		AuthRepository: repo,
+		DB:             DB,
+		Validate:       validate,
+	}
 }
 
 func (service *AuthServiceImpl) Register(ctx context.Context, request authWeb.RegisterRequest) authWeb.AuthResponse {

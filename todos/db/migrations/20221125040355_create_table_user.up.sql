@@ -5,6 +5,6 @@ CREATE TABLE users (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     active TINYINT NOT NULL DEFAULT(1),
-    created_at datetime,
-    updated_at datetime
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE = InnoDB;
