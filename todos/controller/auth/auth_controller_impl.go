@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 	"todos/helper"
+	"todos/jwt"
 	"todos/model/web"
 	web_auth "todos/model/web/auth"
 	service_auth "todos/service/auth"
@@ -29,10 +30,14 @@ func (controller *AuthControllerImpl) Login(writer http.ResponseWriter, request 
 	if err != nil {
 		helper.WriteToErrorBody(writer, 400, err)
 	} else {
-		helper.WriteToResponseBody(writer, web.WebResponse{
+		token, err := jwt.CreateToken(loginResponse.Username)
+		helper.WriteToErrorBody(writer, 400, err)
+
+		helper.WriteToResponseBody(writer, web.LoginResponse{
 			Code:   200,
 			Status: "success",
 			Data:   loginResponse,
+			Token:  token,
 		})
 	}
 }

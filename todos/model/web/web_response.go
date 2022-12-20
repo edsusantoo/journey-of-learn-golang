@@ -11,3 +11,10 @@ type MessageResponse struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 }
+
+type LoginResponse struct {
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Data   any    `json:"data"`
+	Token  any    `json:"token"`
+}

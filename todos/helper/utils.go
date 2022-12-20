@@ -5,8 +5,9 @@ import (
 	"time"
 )
 
-func GetDateTimeNow() string {
-	currentTime := time.Now()
+func GetDateTimeNowString() string {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	currentTime := time.Now().In(loc)
 
 	date := fmt.Sprintf("%d-%d-%d %d:%d:%d\n",
 		currentTime.Year(),
@@ -17,4 +18,10 @@ func GetDateTimeNow() string {
 		currentTime.Second())
 
 	return date
+}
+
+func GetDateTimeNowDate() time.Time {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	currentTime := time.Now().In(loc)
+	return currentTime
 }

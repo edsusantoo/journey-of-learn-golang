@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"todos/app"
 	"todos/helper"
+	"todos/middleware"
 
 	"github.com/go-playground/validator/v10"
 
@@ -27,7 +28,7 @@ func main() {
 
 	server := http.Server{
 		Addr:    "localhost:3000",
-		Handler: router,
+		Handler: middleware.NewAuthMiddleware(router),
 	}
 
 	fmt.Println("Starting serve in localhost:3000")

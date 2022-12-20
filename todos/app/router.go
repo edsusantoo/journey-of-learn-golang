@@ -15,6 +15,13 @@ func NewRoute(authController controller_auth.AuthController) *httprouter.Router 
 
 	router.POST("/api/auth/login", authController.Login)
 	router.POST("/api/auth/register", authController.Register)
+	router.GET("/api/users", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		helper.WriteToResponseBody(w, web.MessageResponse{
+			Code:    200,
+			Status:  "success",
+			Message: "Users",
+		})
+	})
 	router.PanicHandler = exception.ErrorHandler
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
