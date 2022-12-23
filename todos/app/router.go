@@ -2,7 +2,8 @@ package app
 
 import (
 	"net/http"
-	controller_auth "todos/controller/auth"
+	auth_controller "todos/controller/auth"
+	todo_controller "todos/controller/todo"
 	"todos/exception"
 	"todos/helper"
 	"todos/model/web"
@@ -10,18 +11,18 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func NewRoute(authController controller_auth.AuthController) *httprouter.Router {
+func NewRoute(authController auth_controller.AuthController, todoController todo_controller.TodoController) *httprouter.Router {
 	router := httprouter.New()
 
+	//auth
 	router.POST("/api/auth/login", authController.Login)
 	router.POST("/api/auth/register", authController.Register)
-	router.GET("/api/users", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		helper.WriteToResponseBody(w, web.MessageResponse{
-			Code:    200,
-			Status:  "success",
-			Message: "Users",
-		})
-	})
+	router.POST("/api/todo", todoController.Create)
+	router.PATCH("/api/todo/:id", todoController.Update)
+	router.DELETE("/api/todo/:id", todoController.Delete)
+	router.GET("/api/todo/:id", todoController.FindById)
+	router.GET("/api/todos", todoController.FindAll)
+
 	router.PanicHandler = exception.ErrorHandler
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
